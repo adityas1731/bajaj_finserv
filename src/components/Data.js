@@ -3,6 +3,7 @@ import axios from 'axios'
 const Data = () => {
 
     const [data,setData] = useState([]);
+    const [name,setName] = useState('');
 
     const fetchData = async () => {
         
@@ -11,15 +12,41 @@ const Data = () => {
         setData(response.data.employees)
         console.log(data);
     }
-
     useEffect(()=>{
         fetchData();
-    })
+    },[])
+
+    const getFilterData = () => {
+        if (data.length > 0) {
+            const filterData = data.filter((item) => {
+              return item.name && item.name.includes(name);
+            });
+            setData(filterData);
+            console.log(filterData);
+          }
+          
+    }
+
+    
   return (
 <div class="flex flex-col m-16">
   <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
       <div class="overflow-hidden">
+      <div className="mb-4">
+              <label htmlFor="search" className="sr-only">
+                Search
+              </label>
+              <input
+                type="text"
+                id="search"
+                className="px-4 py-2 border border-gray-300 rounded-md"
+                placeholder="Search by name"
+                onChange={()=>{setName(name)}}
+              />
+              <button className='px-4 py-2 border border-gray-300 rounded-md' onClick={()=>{getFilterData()}}>Search</button>
+             
+            </div>
         <table class="min-w-full text-left text-sm font-light">
           <thead class="border-b font-medium dark:border-neutral-500">
             <tr>
